@@ -1,7 +1,6 @@
 
 package com.example.foodlist;
 import android.content.Context;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,14 +17,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.room.Room;
 
 import com.google.android.material.bottomsheet.BottomSheetDialog;
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.lang.reflect.Type;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -53,10 +46,7 @@ public class RemoteFragment extends Fragment implements BottomsheetClickListnr {
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new RemoteAdapter((Context) getActivity(), remoteList, (BottomsheetClickListnr) this);
         recyclerView.setAdapter(adapter);
-//        database = AppDatabase.getInstance(requireContext());
-//        itemDao = database.itemDao();
-//        database = ((MyApp) requireActivity().getApplication()).getDatabase();
-//        itemDao = database.itemDao();
+
     }
 
 
@@ -67,14 +57,18 @@ public class RemoteFragment extends Fragment implements BottomsheetClickListnr {
         database= Room.databaseBuilder(getActivity(),AppDatabase.class,"app_database")
                 .allowMainThreadQueries().fallbackToDestructiveMigration().build();
         itemDao = database.itemDao();
-//       database = ((MyApp) requireActivity().getApplication()).getDatabase();
-//        itemDao = database.itemDao();
         handleRetrofit();
     }
 
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_remote, container, false);
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
     }
 
     private void handleRetrofit() {
@@ -100,33 +94,32 @@ public class RemoteFragment extends Fragment implements BottomsheetClickListnr {
     }
 
     @Override
-    public void onItemClicked(String description) {
+    public void onItemClicked(Category category) {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(getActivity());
         View bottomSheetView = LayoutInflater.from(getActivity()).inflate(R.layout.bottom_sheet, null);
         bottomSheetDialog.setContentView(bottomSheetView);
 
         TextView descriptionTextView = bottomSheetView.findViewById(R.id.desc);
-        descriptionTextView.setText(description); // show remoteList.get(position).getStrCategoryDescription()
+        descriptionTextView.setText(category.getStrCategoryDescription());
 
         Button addButton = bottomSheetView.findViewById(R.id.add);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                insertItemToDatabase(description); // pass remoteList.get(position)
 
-                Toast.makeText(getActivity(), "Items added successfully", Toast.LENGTH_SHORT).show();
-                bottomSheetDialog.dismiss();
-            }
+        addButton.setOnClickListener(v -> {
+            insertItemToDatabase(category); // pass remoteList.get(position)
+
+            Toast.makeText(getActivity(), "Items added successfully", Toast.LENGTH_SHORT).show();
+
+            bottomSheetDialog.dismiss();
         });
 
         bottomSheetDialog.show();
     }
 
-    private void insertItemToDatabase(String itemName) {
-        ItemEntity item = new ItemEntity(itemName); // remoteList.get(position)
-//        AppDatabase database = ((MyApp) requireActivity().getApplication()).getDatabase();
-//        itemDao = database.itemDao();
-        itemDao.insertItem(item);
+
+    private void insertItemToDatabase(Category category) {
+        ItemEntity item = new ItemEntity(category.getStrCategory(), category.getStrCategoryThumb(), category.getStrCategoryDescription());
+       itemDao.insertItem(item);
+
     }
 }
 
