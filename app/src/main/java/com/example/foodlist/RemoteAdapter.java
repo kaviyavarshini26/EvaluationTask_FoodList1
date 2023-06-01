@@ -13,20 +13,15 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RemoteAdapter extends RecyclerView.Adapter<RemoteAdapter.ViewHolder> {
 
 
 
-    private List<Category> remoteList ;
+    private List<Category> remoteList;
     BottomsheetClickListnr bottomListner;
-
-//    private List<Category> foodItems;
-//    private ApiInterface apiInterface;
     Context context;
-//    private AdapterView.OnItemClickListener listener;
 
 
     public RemoteAdapter(Context context, List<Category> remoteList, BottomsheetClickListnr listner) {
@@ -43,7 +38,6 @@ public class RemoteAdapter extends RecyclerView.Adapter<RemoteAdapter.ViewHolder
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       // LayoutInflater layoutInflater=LayoutInflater.from(parent.getContext());
         View view = LayoutInflater.from(context).inflate(R.layout.item_design, parent, false);
         return new ViewHolder(view);
     }
@@ -51,10 +45,7 @@ public class RemoteAdapter extends RecyclerView.Adapter<RemoteAdapter.ViewHolder
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, @SuppressLint("RecyclerView") int position) {
 
-//        holder.StrId.setText(remoteList.get(position).getIdCategory());
-        //   holder.StrThumb.setImageResource(remoteList.get(position).getStrCategoryThumb());
         holder.StrName.setText(remoteList.get(position).getStrCategory());
-      holder.StrDesc.setText(remoteList.get(position).getStrCategoryDescription());
 
 
         Glide.with(context)
@@ -66,7 +57,7 @@ public class RemoteAdapter extends RecyclerView.Adapter<RemoteAdapter.ViewHolder
             @Override
             public void onClick(View v) {
                 // Open bottom sheet with description
-                bottomListner.onItemClicked(remoteList.get(position).getStrCategoryDescription()); // pass remoteList.get(position)
+                bottomListner.onItemClicked(remoteList.get(position));
             }
         });
     }
@@ -83,16 +74,14 @@ public class RemoteAdapter extends RecyclerView.Adapter<RemoteAdapter.ViewHolder
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         ImageView StrThumb;
-        TextView StrDesc, StrName, StrId;
-        TextView FoodDesc;
+        TextView StrDesc, StrName;
 
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             StrThumb = itemView.findViewById(R.id.imageview1thumb);
            StrDesc = itemView.findViewById(R.id.textview3desc);
-            StrName = itemView.findViewById(R.id.strname);
-//            StrId = itemView.findViewById(R.id.strid);
+            StrName = itemView.findViewById(R.id.textview3desc);
 
         }
 
@@ -100,4 +89,6 @@ public class RemoteAdapter extends RecyclerView.Adapter<RemoteAdapter.ViewHolder
         }
 
     }
+
+
 
