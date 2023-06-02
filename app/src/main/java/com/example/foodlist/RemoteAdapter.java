@@ -90,5 +90,3 @@ public class RemoteAdapter extends RecyclerView.Adapter<RemoteAdapter.ViewHolder
 
     }
 
-
-
