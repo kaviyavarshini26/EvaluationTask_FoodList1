@@ -1,5 +1,6 @@
 
 package com.example.foodlist;
+import android.content.ClipData;
 import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -65,11 +66,11 @@ public class RemoteFragment extends Fragment implements BottomsheetClickListnr {
         return view;
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-
-    }
+//    @Override
+//    public void onResume() {
+//        super.onResume();
+//
+//    }
 
     private void handleRetrofit() {
         Call<CategoryResponse> call = RetrofitClient.getInstance().getApi().fetchAllRemote();
@@ -121,6 +122,11 @@ public class RemoteFragment extends Fragment implements BottomsheetClickListnr {
        itemDao.insertItem(item);
 
     }
+    private void deleteItem(Category category){
+         insertItemToDatabase(category);
+
+    }
+
 }
 
 
